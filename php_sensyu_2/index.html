@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>SkyWay Tutorial</title>
+    <link rel="stylesheet" href="css/index.css" />
+  </head>
+  <body>
+    <p>ID: <span id="my-id"></span></p>
+    <div>
+      room name: <input id="room-name" type="text" />
+      <button id="join">join</button>
+      <button id="leave">leave</button>
+    </div>
+    <video id="local-video" width="400px" muted playsinline></video>
+    <canvas id="my-canvas" width="640" height="450"></canvas>
+    <div id="button-area"></div>
+    <div id="remote-media-area"></div>
+
+    <!-- SKY WAYをインポート -->
+    <script src="https://cdn.jsdelivr.net/npm/@skyway-sdk/room/dist/skyway_room-latest.js"></script>
+    <!-- MediaPipeをインポート -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest"></script> -->
+
+    <script type="module" src="main.js"></script>
+  </body>
+</html>
