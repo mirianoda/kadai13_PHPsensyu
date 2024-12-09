@@ -69,8 +69,24 @@ const token = new SkyWayAuthToken({
     const canvas = document.getElementById("my-canvas");
     const ctx = canvas.getContext("2d");
 
+    const avatarElements = document.querySelectorAll('.animals span');
+    let selectedAvatar = 'assets/azarashi.png'; // デフォルトのアバター
+
     let canvasStream = "";
     let processedAudioStream = "";
+
+    // アバター選択のイベントリスナーを設定
+    avatarElements.forEach((span) => {
+      span.addEventListener('click', () => {
+        // すべての選択を解除
+        avatarElements.forEach((el) => el.classList.remove('selected'));
+        // 選択された要素に "selected" クラスを追加
+        span.classList.add('selected');
+        // 選択されたアバターを更新
+        selectedAvatar = span.dataset.avatar;
+        console.log(`Selected avatar: ${selectedAvatar}`);
+      });
+    });  
     
     //映像を取得して加工
     navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
@@ -110,7 +126,8 @@ const token = new SkyWayAuthToken({
           
               // アバター画像を描画
               const avatarImg = new Image();
-              avatarImg.src = "assets/avatar.png";
+              // avatarImg.src = "assets/avatar.png";
+              avatarImg.src = selectedAvatar; // 選択されたアバターを使用
                           
               avatarImg.onload = () => {
                 console.log("Avatar image loaded successfully");
@@ -122,8 +139,8 @@ const token = new SkyWayAuthToken({
                   const x = nose.x * canvas.width;
                   const y = nose.y * canvas.height;
               
-                  const size = 400; // アバター画像のサイズ
-                  ctx.drawImage(avatarImg, x - size / 2, y - size / 2 - 70, size, size);
+                  const size = 550; // アバター画像のサイズ
+                  ctx.drawImage(avatarImg, x - size / 2, y - size / 2, size, size);
                 }
               }
             }
@@ -184,7 +201,10 @@ const token = new SkyWayAuthToken({
   //room の作成と入室
   //joinボタンを押すと、トークンを使ってcontext（認証認可やログの設定方法が設定されたグローバルな情報）を作成
     joinButton.onclick = async () => {
-      if (roomNameInput.value === "") return; //roomnameが空の場合は戻る
+      if (!roomNameInput.value) {
+        alert("ルーム名を入力してください");
+        return;
+      }
 
       // CanvasをChatコンテナに移動
       chatContainer.appendChild(canvas);
@@ -202,9 +222,12 @@ const token = new SkyWayAuthToken({
           name: roomNameInput.value,
         });
       //ルームに入室し、Memberオブジェクトを取得
-      const me = await room.join();
-      console.log("Joined room as:", me.id);
-        
+      const me = await room.join({
+        name: String(userName) // PHPから渡された値を利用
+      });
+      console.log("Joined room as:", me.id,userName);
+
+      document.getElementById("my-username").textContent = userName;  
       myId.textContent = me.id;
       
       //自分の音声と映像をパブリッシュ（Memberオブジェクトの中にpublish関数がある）
@@ -228,10 +251,12 @@ const token = new SkyWayAuthToken({
                 newMedia = document.createElement("video");
                 // newMedia.playsInline = true;
                 newMedia.autoplay = true;
+                newMedia.controls = false; // コントロールを非表示にする
+                newMedia.playsInline = true; // モバイルブラウザで必須
                 break;
               case "audio":
                 newMedia = document.createElement("audio");
-                newMedia.controls = true;
+                newMedia.controls = true; // コントロールを非表示にする
                 newMedia.autoplay = true;
                 break;
               default:
@@ -261,7 +286,43 @@ const token = new SkyWayAuthToken({
       });
       //roomのonStreamPublishedはEvent型で、addという関数がある
 
+    // 参加したメンバーの名前を取得して表示
+    room.onMemberJoined.add((member) => {
+      if (member.id !== me.id) {
+        let peerUserName = member.name || "相手";
+        document.getElementById("peer-username").textContent = peerUserName;
+      
+        // 名前を取得できるまで再確認
+        const intervalId = setInterval(() => {
+          const updatedMember = room.members.find((m) => m.id === member.id); // 参加したメンバーを特定
+          if (updatedMember && updatedMember.name) {
+            peerUserName = updatedMember.name; // 正しい名前を取得
+            document.getElementById("peer-username").textContent = peerUserName;
+            console.log("Updated peer username:", peerUserName);
+            clearInterval(intervalId); // 確認が完了したら停止
+          }
+        }, 500); // 0.5秒ごとに確認
+      }
+    });
+            
+      
+      // 相手が退出した場合の処理
+      room.onMemberLeft.add((member) => {
+        if (member.id !== me.id) {
+          document.getElementById("peer-username").textContent = "相手が退室しました";
+          console.log("Peer left the room");
+        }
+      });
 
+      //既にいるメンバーの名前を取得して表示
+      const existingMembers = room.members.filter((member) => member.id !== me.id);
+      if (existingMembers.length > 0) {
+        const peer = existingMembers[0]; // 最初の相手メンバーを取得
+        const peerUserName = peer.name || "相手";
+        document.getElementById("peer-username").textContent = peerUserName;
+        console.log("Existing peer username:", peerUserName);
+      }      
+      
   //自分の退室処置
   leaveButton.onclick = async () => {
     await me.leave();
