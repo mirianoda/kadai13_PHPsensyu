@@ -2,15 +2,14 @@
 const { nowInSec, SkyWayAuthToken, SkyWayContext, SkyWayRoom, SkyWayStreamFactory, uuidV4, LocalVideoStream, LocalAudioStream, RemoteVideoStream, RemoteAudioStream} = skyway_room;
 
 //SkyWay Auth Tokenの作成
-import skywayId from './config.js';
-import skywayKey from './config.js';
+import config from './config.js';
 const token = new SkyWayAuthToken({
     jti: uuidV4(),
     iat: nowInSec(),
     exp: nowInSec() + 60 * 60 * 24,
     scope: {
       app: {
-        id: "83f5cbed-657e-435e-826f-1b5e1f700368",
+        id: config.skywayId,
         turn: true,
         actions: ["read", "write"],
         channels: [
@@ -45,7 +44,7 @@ const token = new SkyWayAuthToken({
         ],
     },
 },
-  }).encode("YMohc6bhcLO53aCaaqiBP6X8ViozTiJ6v0JL0lgmgVc=");
+  }).encode(config.skywayKey);
 
   //Mediapipeのセットアップ
   import vision from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3";
