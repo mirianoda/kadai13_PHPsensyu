@@ -5,24 +5,74 @@
     <meta name="viewport" content="width=device-width" />
     <title>SkyWay Tutorial</title>
     <link rel="stylesheet" href="css/index.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee+Tint&family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400..900&family=Dongle:wght@300;400;700&family=Galada&family=Montserrat+Alternates:wght@100;200;300;400&family=Poiret+One&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&family=Zen+Maru+Gothic&display=swap" rel="stylesheet">
   </head>
   <body>
-    <p>ID: <span id="my-id"></span></p>
-    <div>
-      room name: <input id="room-name" type="text" />
-      <button id="join">join</button>
-      <button id="leave">leave</button>
-    </div>
-    <video id="local-video" width="400px" muted playsinline></video>
-    <canvas id="my-canvas" width="640" height="450"></canvas>
-    <div id="button-area"></div>
-    <div id="remote-media-area"></div>
+
+  <!-- 参加前画面 -->
+  <div id="join-screen">
+    <header>
+      <div class="login-msg">
+          <p>さんがログインしています</p>
+            <a id="logout" href="logout.php"><img src="assets/logout.png" alt="">ログアウト</a>
+      </div>
+      <h1 class="logo">Animal Chat</h1>
+    </header>
+
+   <div class="middle">
+     <!-- <p>ID: <span id="my-id"></span></p> -->
+     <div class="middle-text">
+      <p>相手と決めたルーム名（英字のみ）を入力してください</p>
+      <p>room name: <input id="room-name" type="text" /></p>
+      <div id="characterSelect"></div>
+     </div>
+     <div class="middle-video">
+       <video id="local-video" muted playsinline></video>
+       <div id="preview-container">
+        <canvas id="my-canvas"></canvas>
+      </div>
+     </div>
+     <div class="middle-button">
+       <button id="join">入室する</button>
+     </div>
+   </div>
+  </div>
+
+  <!-- 通話中画面 -->
+  <div id="chat-screen">
+    <header>
+      <div class="login-msg">
+      </div>
+      <h1 class="logo">Animal Chat</h1>
+      <img src="assets/REC.png" alt="" class="RECicon">
+    </header>
+
+   <div class="middle">
+     <p>ID: <span id="my-id"></span></p>
+     <div class="middle-text">
+       ROOM: <span id="room-name-display"></span>
+     </div>
+     <div class="middle-video">
+       <!-- <video id="local-video" muted playsinline></video> -->
+       <div id="chat-container">
+        <!-- 通話中はここにCanvasを移動 -->
+       </div>
+       <div id="remote-media-area" width="400px"></div>
+     </div>
+     <div class="middle-button">
+       <button id="leave">退室する</button>
+     </div>
+   </div>
+  </div>
 
     <!-- SKY WAYをインポート -->
     <script src="https://cdn.jsdelivr.net/npm/@skyway-sdk/room/dist/skyway_room-latest.js"></script>
     <!-- MediaPipeをインポート -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest"></script> -->
-
+    <!-- Tone.jsをインポート -->
+    <script src="http://unpkg.com/tone"></script>
     <script type="module" src="main.js"></script>
   </body>
 </html>

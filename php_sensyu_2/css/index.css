@@ -1,3 +1,120 @@
 #local-video{
     display: none;
 }
+#chat-screen {
+    display: none; /* 初期状態では非表示 */
+  }
+
+body{
+    width: 100%;
+    font-family: "Zen Kaku Gothic New", serif;
+    font-weight: 400;
+    font-style: normal;
+    color: #bcb5b5;
+  }
+  
+  .logo{
+    font-family: "Montserrat Alternates", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    color: white ;
+  }
+  
+  header {
+    height: 6rem;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    justify-items: center;
+    align-items: center;
+    padding-right: 2rem;
+    padding-left: 2rem;
+    background-color: #bcb5b5;
+  }
+  
+  header h1 {
+    margin: 0; /* 余白をリセット */
+    grid-column: 2;
+  }
+  
+  .RECicon {
+    justify-self: end;
+    width: 3rem;
+  }
+  
+  .login-msg{
+    text-align: end;
+    margin-top: 0.4rem;
+    font-size: 1rem;
+    justify-self: left;
+  }
+  
+  .login-msg a{
+    display: flex;
+    color: white;
+    text-decoration: none;
+    align-items: center;
+    margin-right: 1rem;
+  }
+  
+  .login-msg p{
+    color: white;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .login-msg img{
+    width: 1.2rem;
+  }
+
+  .middle-text{
+    font-size: 25px;
+    padding-top: 6rem;
+    text-align: center;
+  }
+
+  .middle-video{
+    display: flex;
+    width: fit-content;
+    margin: auto;
+    margin-top: 2rem;
+  }
+
+  #my-canvas{
+    border-radius: 5%;
+    width: 640px;
+    height: 480px;
+    margin-right: 0.5rem;
+  }
+
+  #remote-media-area{
+    background-color: bisque;
+    border-radius: 5%;
+    width: 640px;
+    height: 480px;
+    margin-left: 0.5rem;
+  }
+
+  video{
+    width: 640px;
+    height: 480px;
+    border-radius: 5%;
+  }
+
+  .middle-button{
+    text-align: center;
+    align-items: center;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+
+  #leave,#join{
+    background-color: #bcb5b5;
+    color: white;
+    width: 400px;
+    height: 75px;
+    border-radius: 5%;
+    font-size: 20px;
+    border: none;
+  }
